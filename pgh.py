@@ -237,6 +237,21 @@ def outliers(cursor):
     click.echo("This extension is only available on Postgres versions 9.2 or greater. You can install it by running:")
     click.echo("\n\tCREATE EXTENSION pg_stat_statements;\n\n")
 
+@database_command
+def ps(cursor):
+  sql = """
+    SELECT pid, state, application_name AS source,
+      age(now(),xact_start) AS running_for, waiting, query
+    FROM pg_stat_activity
+    WHERE query <> '<insufficient privilege>' AND state <> 'idle'
+      AND pid <> pg_backend_pid()
+    ORDER BY query_start DESC
+  """
+
+  cursor.execute(sql)
+
+  return cursor
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -252,3 +267,4 @@ cli.add_command(index_usage)
 cli.add_command(locks)
 cli.add_command(long_running_queries)
 cli.add_command(outliers)
+cli.add_command(ps)
