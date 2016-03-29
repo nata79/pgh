@@ -264,6 +264,18 @@ def records_rank(cursor):
 
   return cursor
 
+@database_command
+def seq_scans(cursor):
+  sql = """
+    SELECT relname AS name, seq_scan as count
+    FROM pg_stat_user_tables
+    ORDER BY seq_scan DESC
+  """
+
+  cursor.execute(sql)
+
+  return cursor
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -281,3 +293,4 @@ cli.add_command(long_running_queries)
 cli.add_command(outliers)
 cli.add_command(ps)
 cli.add_command(records_rank)
+cli.add_command(seq_scans)
