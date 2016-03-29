@@ -310,6 +310,24 @@ def total_table_size(cursor):
 
   return cursor
 
+@database_command
+def unused_indexes(cursor):
+  sql = """
+    SELECT schemaname || '.' || relname AS table, indexrelname AS index,
+      pg_size_pretty(pg_relation_size(i.indexrelid)) AS index_size,
+      idx_scan as index_scans
+    FROM pg_stat_user_indexes ui
+    JOIN pg_index i ON ui.indexrelid = i.indexrelid
+    WHERE NOT indisunique AND idx_scan < 50 AND pg_relation_size(relid) > 5 * 8192
+    ORDER BY
+      pg_relation_size(i.indexrelid) / nullif(idx_scan, 0) DESC NULLS FIRST,
+      pg_relation_size(i.indexrelid) DESC
+  """
+
+  cursor.execute(sql)
+
+  return cursor
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -330,3 +348,4 @@ cli.add_command(records_rank)
 cli.add_command(seq_scans)
 cli.add_command(table_size)
 cli.add_command(total_table_size)
+cli.add_command(unused_indexes)
