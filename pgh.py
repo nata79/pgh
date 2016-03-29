@@ -293,6 +293,23 @@ def table_size(cursor):
 
   return cursor
 
+@database_command
+def total_table_size(cursor):
+  sql = """
+    SELECT c.relname AS name,
+        pg_size_pretty(pg_total_relation_size(c.oid)) AS size
+    FROM pg_class c
+    LEFT JOIN pg_namespace n ON (n.oid = c.relnamespace)
+    WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
+      AND n.nspname !~ '^pg_toast'
+      AND c.relkind='r'
+    ORDER BY pg_total_relation_size(c.oid) DESC
+  """
+
+  cursor.execute(sql)
+
+  return cursor
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -312,3 +329,4 @@ cli.add_command(ps)
 cli.add_command(records_rank)
 cli.add_command(seq_scans)
 cli.add_command(table_size)
+cli.add_command(total_table_size)
