@@ -7,6 +7,16 @@ def print_results(cursor):
   headers = map(lambda column: column.name, cursor.description)
   click.echo(tabulate(cursor, headers=headers, tablefmt="psql"))
 
+def pg_stat_statement_available(cursor):
+  sql = """
+    SELECT exists(
+      SELECT 1 FROM pg_extension e LEFT JOIN pg_namespace n ON n.oid = e.extnamespace
+      WHERE e.extname='pg_stat_statements' AND n.nspname = 'public'
+    ) AS available
+  """
+  cursor.execute(sql)
+  return cursor.fetchone()[0]
+
 def database_command(fn):
   @click.command(fn.__name__)
   @click.pass_context
@@ -14,7 +24,10 @@ def database_command(fn):
     connection = psycopg2.connect(ctx.obj)
     cursor = connection.cursor()
 
-    print_results(fn(cursor))
+    results = fn(cursor)
+
+    if results:
+      print_results(results)
 
     cursor.close()
     connection.close()
@@ -132,6 +145,26 @@ def cache_hit(cursor):
 
   return cursor
 
+@database_command
+def calls(cursor):
+  if pg_stat_statement_available(cursor):
+    sql = """
+      SELECT query AS qry,
+        interval '1 millisecond' * total_time AS exec_time,
+        to_char((total_time/sum(total_time) OVER()) * 100, 'FM90D0') || '%'  AS prop_exec_time,
+        to_char(calls, 'FM999G999G990') AS ncalls,
+        interval '1 millisecond' * (blk_read_time + blk_write_time) AS sync_io_time
+      FROM pg_stat_statements WHERE userid = (SELECT usesysid FROM pg_user WHERE usename = current_user LIMIT 1)
+      ORDER BY calls DESC LIMIT 10
+    """
+    cursor.execute(sql)
+
+    return cursor
+  else:
+    click.echo("pg_stat_statements extension need to be installed in the public schema first.")
+    click.echo("This extension is only available on Postgres versions 9.2 or greater. You can install it by running:")
+    click.echo("\n\tCREATE EXTENSION pg_stat_statements;\n\n")
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -142,3 +175,4 @@ cli.add_command(index_sizes)
 cli.add_command(bloat)
 cli.add_command(blocking)
 cli.add_command(cache_hit)
+cli.add_command(calls)
