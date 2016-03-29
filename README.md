@@ -43,7 +43,7 @@ pgh postgres://andre@localhost/test index_sizes
 | [x] | calls | show 10 most frequently called queries |
 | [ ] | diagnose | run diagnostics report on your database |
 | [x] | index\_size | show the size of indexes, descending by size |
-| [ ] | index\_usage | calculates your index hit rate (effective databases are at 99% and up) |
+| [x] | index\_usage | calculates your index hit rate (effective databases are at 99% and up) |
 | [ ] | locks | display queries with active locks |
 | [ ] | long\_running\_queries | show all queries longer than five minutes by descending duration |
 | [ ] | outliers | show 10 queries that have longest execution time in aggregate |

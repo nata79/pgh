@@ -165,6 +165,22 @@ def calls(cursor):
     click.echo("This extension is only available on Postgres versions 9.2 or greater. You can install it by running:")
     click.echo("\n\tCREATE EXTENSION pg_stat_statements;\n\n")
 
+@database_command
+def index_usage(cursor):
+  sql = """
+    SELECT relname,
+      CASE idx_scan
+        WHEN 0 THEN 'Insufficient data'
+        ELSE (100 * idx_scan / (seq_scan + idx_scan))::text
+      END percent_of_times_index_used
+    FROM pg_stat_user_tables
+    ORDER BY percent_of_times_index_used ASC
+  """
+
+  cursor.execute(sql)
+
+  return cursor
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -176,3 +192,4 @@ cli.add_command(bloat)
 cli.add_command(blocking)
 cli.add_command(cache_hit)
 cli.add_command(calls)
+cli.add_command(index_usage)
