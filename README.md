@@ -51,7 +51,7 @@ pgh postgres://andre@localhost/test index_sizes
 | [ ] | pull TARGET_DATABASE | pull from your database to TARGET_DATABASE |
 | [x] | records\_rank | show all tables and the number of rows in each ordered by number of rows descending |
 | [x] | seq\_scans | show the count of sequential scans by table descending by order |
-| [ ] | table\_size | show the size of the tables (excluding indexes), descending by size |
+| [x] | table\_size | show the size of the tables (excluding indexes), descending by size |
 | [ ] | total\_table\_size | show the size of the tables (including indexes), descending by size |
 | [ ] | unused_indexes | show unused and almost unused indexes |
 
