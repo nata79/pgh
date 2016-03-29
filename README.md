@@ -39,7 +39,7 @@ pgh postgres://andre@localhost/test index_sizes
 | --- | --- | --- |
 | [x] | bloat | show table and index bloat in your database ordered by most wasteful |
 | [x] | blocking | display queries holding locks other queries are waiting to be released |
-| [ ] | cache\_hit | calculates your cache hit rate (effective databases are at 99% and up) |
+| [x] | cache\_hit | calculates your cache hit rate (effective databases are at 99% and up) |
 | [ ] | calls | show 10 most frequently called queries |
 | [ ] | diagnose | run diagnostics report on your database |
 | [x] | index\_size | show the size of indexes, descending by size |
