@@ -46,7 +46,7 @@ pgh postgres://andre@localhost/test index_sizes
 | [x] | index\_usage | calculates your index hit rate (effective databases are at 99% and up) |
 | [x] | locks | display queries with active locks |
 | [x] | long\_running\_queries | show all queries longer than five minutes by descending duration |
-| [ ] | outliers | show 10 queries that have longest execution time in aggregate |
+| [x] | outliers | show 10 queries that have longest execution time in aggregate |
 | [ ] | ps | view active queries with execution time |
 | [ ] | pull TARGET_DATABASE | pull from your database to TARGET_DATABASE |
 | [ ] | records\_rank | show all tables and the number of rows in each ordered by number of rows descending |

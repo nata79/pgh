@@ -216,6 +216,27 @@ def long_running_queries(cursor):
 
   return cursor
 
+@database_command
+def outliers(cursor):
+  if pg_stat_statement_available(cursor):
+    sql = """
+      SELECT interval '1 millisecond' * total_time AS total_exec_time,
+        to_char((total_time/sum(total_time) OVER()) * 100, 'FM90D0') || '%'  AS prop_exec_time,
+        to_char(calls, 'FM999G999G999G990') AS ncalls,
+        interval '1 millisecond' * (blk_read_time + blk_write_time) AS sync_io_time, query
+      FROM pg_stat_statements
+      WHERE userid = (SELECT usesysid FROM pg_user WHERE usename = current_user LIMIT 1)
+      ORDER BY total_time DESC LIMIT 10
+    """
+
+    cursor.execute(sql)
+
+    return cursor
+  else:
+    click.echo("pg_stat_statements extension need to be installed in the public schema first.")
+    click.echo("This extension is only available on Postgres versions 9.2 or greater. You can install it by running:")
+    click.echo("\n\tCREATE EXTENSION pg_stat_statements;\n\n")
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -230,3 +251,4 @@ cli.add_command(calls)
 cli.add_command(index_usage)
 cli.add_command(locks)
 cli.add_command(long_running_queries)
+cli.add_command(outliers)
