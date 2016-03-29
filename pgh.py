@@ -199,6 +199,23 @@ def locks(cursor):
 
   return cursor
 
+@database_command
+def long_running_queries(cursor):
+  sql = """
+    SELECT
+      pid, now() - pg_stat_activity.query_start AS duration, query
+    FROM
+      pg_stat_activity
+    WHERE pg_stat_activity.query <> ''::text
+      AND state <> 'idle'
+      AND now() - pg_stat_activity.query_start > interval '5 minutes'
+    ORDER BY now() - pg_stat_activity.query_start DESC
+  """
+
+  cursor.execute(sql)
+
+  return cursor
+
 @click.group()
 @click.pass_context
 @click.argument('database_url')
@@ -212,3 +229,4 @@ cli.add_command(cache_hit)
 cli.add_command(calls)
 cli.add_command(index_usage)
 cli.add_command(locks)
+cli.add_command(long_running_queries)
