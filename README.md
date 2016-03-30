@@ -1,8 +1,8 @@
 # PGH
 
-PGH is a command tool to help you monitor and debug your PostgreSQL database.
+PGH is a command line tool to help you monitor and debug your PostgreSQL database.
 
-## Instalation (comming soon)
+## Instalation
 
 ```
 pip install pgh
