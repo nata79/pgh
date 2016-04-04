@@ -1,6 +1,24 @@
 # PGH
 
-PGH is a command line tool to help you monitor and debug your PostgreSQL database.
+PGH is a CLI tool to help you manage your PostgreSQL database. It provides a list of utility commands to help you keep track of what's going on.
+
+```
+pgh $DATABASE_URL total_table_size
++-----------------------------+------------+
+| name                        | size       |
+|-----------------------------+------------|
+| posts                       | 99 GB      |
+| media                       | 99 GB      |
+| comments                    | 11 GB      |
+| users                       | 4511 MB    |
+| oauth_access_tokens         | 4359 MB    |
+| followers                   | 3403 MB    |
+| devices                     | 2645 MB    |
+| notifications               | 1821 MB    |
++-----------------------------+------------+
+```
+
+*Example calculates the size of each table including indexes.*
 
 ## Instalation
 
@@ -58,9 +76,9 @@ pgh postgres://andre@localhost/test index_sizes
 ## Roadmap
 
 - Implement missing commands;
-- Support connection parameters as specified [here](http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS);
 - Integrate with Heroku API to get the connection string (something like `pgh --heroku command`);
 - Integrate with AWS to to get the connection string from RDS (something like `pgh --rds command`);
+- Support connection parameters as specified [here](http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS).
 
 ## Acknowledgements
 

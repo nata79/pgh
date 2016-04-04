@@ -5,7 +5,15 @@ from tabulate import tabulate
 
 def print_results(cursor):
   headers = map(lambda column: column.name, cursor.description)
-  click.echo(tabulate(cursor, headers=headers, tablefmt="psql"))
+
+  def truncate_row(row):
+      return map(truncate_column, row)
+
+  def truncate_column(column):
+      column = str(column)
+      return (column[:90] + '..') if len(column) > 75 else column
+
+  click.echo(tabulate(map(truncate_row, cursor), headers=headers, tablefmt="psql"))
 
 def pg_stat_statement_available(cursor):
   sql = """
