@@ -53,31 +53,30 @@ pgh postgres://andre@localhost/test index_sizes
 
 ## Commands
 
-| Implemented | Command | Description |
-| --- | --- | --- |
-| [x] | bloat | show table and index bloat in your database ordered by most wasteful |
-| [x] | blocking | display queries holding locks other queries are waiting to be released |
-| [x] | cache\_hit | calculates your cache hit rate (effective databases are at 99% and up) |
-| [x] | calls | show 10 most frequently called queries |
-| [ ] | diagnose | run diagnostics report on your database |
-| [x] | index\_size | show the size of indexes, descending by size |
-| [x] | index\_usage | calculates your index hit rate (effective databases are at 99% and up) |
-| [x] | locks | display queries with active locks |
-| [x] | long\_running\_queries | show all queries longer than five minutes by descending duration |
-| [x] | outliers | show 10 queries that have longest execution time in aggregate |
-| [x] | ps | view active queries with execution time |
-| [ ] | pull TARGET_DATABASE | pull from your database to TARGET_DATABASE |
-| [x] | records\_rank | show all tables and the number of rows in each ordered by number of rows descending |
-| [x] | seq\_scans | show the count of sequential scans by table descending by order |
-| [x] | table\_size | show the size of the tables (excluding indexes), descending by size |
-| [x] | total\_table\_size | show the size of the tables (including indexes), descending by size |
-| [x] | unused\_indexes | show unused and almost unused indexes |
+| Command | Description |
+| --- | --- |
+| bloat | show table and index bloat in your database ordered by most wasteful |
+| blocking | display queries holding locks other queries are waiting to be released |
+| cache\_hit | calculates your cache hit rate (effective databases are at 99% and up) |
+| calls | show 10 most frequently called queries |
+| index\_size | show the size of indexes, descending by size |
+| index\_usage | calculates your index hit rate (effective databases are at 99% and up) |
+| locks | display queries with active locks |
+| long\_running\_queries | show all queries longer than five minutes by descending duration |
+| outliers | show 10 queries that have longest execution time in aggregate |
+| ps | view active queries with execution time |
+| records\_rank | show all tables and the number of rows in each ordered by number of rows descending |
+| seq\_scans | show the count of sequential scans by table descending by order |
+| table\_size | show the size of the tables (excluding indexes), descending by size |
+| total\_table\_size | show the size of the tables (including indexes), descending by size |
+| unused\_indexes | show unused and almost unused indexes |
 
 ## Roadmap
 
-- Implement missing commands;
-- Integrate with Heroku API to get the connection string (something like `pgh --heroku command`);
 - Integrate with AWS to to get the connection string from RDS (something like `pgh --rds command`);
+- Integrate with Heroku API to get the connection string (something like `pgh --heroku command`);
+- Implement `pull` command to copy data from a remote database to a target;
+- - Implement `diagnose` command to generate a report of the general health of the database;
 - Support connection parameters as specified [here](http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS).
 
 ## Acknowledgements
