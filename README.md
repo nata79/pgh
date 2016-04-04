@@ -1,5 +1,7 @@
 # PGH
 
+[![PyPI version](https://badge.fury.io/py/pgh.svg)](https://badge.fury.io/py/pgh)
+
 PGH is a CLI tool to help you manage your PostgreSQL database. It provides a list of utility commands to help you keep track of what's going on.
 
 ```
